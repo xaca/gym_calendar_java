@@ -7,8 +7,10 @@ package controlador;
 
 import modelo.constantes.Consulta;
 import java.sql.*;
+import java.util.ArrayList;
 import modelo.Fecha;
 import modelo.Hora;
+import modelo.Reserva;
 import modelo.Usuario;
 import modelo.constantes.Configuracion;
 
@@ -45,29 +47,38 @@ public class GestorBaseDatos {
     }
     
     
-    public static Usuario traerReservas(int id_hora,Fecha fecha) {
+    public static ArrayList<Reserva> traerReservas(int id_hora,Fecha fecha) {
 
         Connection conn;
         Statement stmt;
         ResultSet rs = null;
-        Usuario respuesta = null;
+        ArrayList<Reserva> reservas = null;
+        Reserva reserva;
+        Usuario usuario;
         
         try {
             Class.forName(Configuracion.DRIVER);
             conn = DriverManager.getConnection(Configuracion.URL_BASE_DATOS, Configuracion.USUARIO, Configuracion.CLAVE);
             stmt = conn.createStatement();
             //System.out.println(Consulta.crearValidacionClave(usuario));
-            //rs = stmt.executeQuery(Consulta.crearValidacionClave(usuario));
+            rs = stmt.executeQuery(Consulta.traerReservas(id_hora,fecha));
+            reservas = new ArrayList<Reserva>();
             
-            if(rs.next())
+            while(rs.next())
             {
-                respuesta = new Usuario();
-                respuesta.setId(rs.getInt("id"));                
-                respuesta.setUsuario(rs.getString("usuario"));
-                respuesta.setNombre(rs.getString("nombre"));
-                respuesta.setApellido(rs.getString("apellido"));
-                respuesta.setCorreo(rs.getString("correo"));
-
+                reserva = new Reserva();
+                reserva.setId_reserva(rs.getInt("id"));
+                reserva.setId_hora(rs.getInt("id_hora"));
+                reserva.setFecha(new Fecha(rs.getString("dia")));
+                usuario = new Usuario();
+                usuario.setId(rs.getInt("id_usuario"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setApellido(rs.getString("apellido"));
+                usuario.setDireccion(rs.getString("direccion"));
+                usuario.setTelefono(rs.getString("telefono"));
+                usuario.setCorreo(rs.getString("correo"));
+                reserva.setUsuario(usuario);
+                reservas.add(reserva);
             }
             
             conn.close();
@@ -76,7 +87,7 @@ public class GestorBaseDatos {
             System.out.println(e);
         }
 
-        return respuesta;
+        return reservas;
     }
     
     /**

@@ -5,6 +5,10 @@
  */
 package vista;
 
+import controlador.ControladorReservas;
+import java.util.ArrayList;
+import modelo.Fecha;
+import modelo.Reserva;
 import modelo.Usuario;
 import vista.contenedor.ContenedorReserva;
 
@@ -14,17 +18,27 @@ import vista.contenedor.ContenedorReserva;
  */
 public class AdministradorReserva extends javax.swing.JFrame {
 
+    ControladorReservas cr;
     /**
      * Creates new form Reserva
      */
     public AdministradorReserva() {
         initComponents();
+    }
+    
+    public AdministradorReserva(int id_hora,Fecha fecha){
+        initComponents();
+        cr = new ControladorReservas();
+        cr.traerReservas(id_hora, fecha);
         iniciarReservas();
     }
     
     private void iniciarReservas() {
-        for (int i = 0; i < 15; i++) {
-            jPanel1.add(new ContenedorReserva(new Usuario(),true));
+        
+        ArrayList<Reserva> reservas = cr.getReservas();
+        
+        for (int i = 0; i < reservas.size(); i++) {
+            jPanel1.add(new ContenedorReserva(reservas.get(i).getUsuario(),false));
         }
     }
     

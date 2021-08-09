@@ -5,7 +5,10 @@
  */
 package vista.contenedor;
 
+import controlador.ControladorReservas;
+import javax.swing.JOptionPane;
 import modelo.Usuario;
+import vista.AdministradorReserva;
 
 /**
  *
@@ -15,7 +18,8 @@ public class ContenedorReserva extends javax.swing.JPanel {
 
     private boolean estado;
     private Usuario usuario;
-    
+    private ControladorReservas cr;
+  
     /**
      * Creates new form ContenedorReserva
      */
@@ -26,18 +30,21 @@ public class ContenedorReserva extends javax.swing.JPanel {
     public ContenedorReserva(Usuario usuario,boolean estado){
         
         initComponents();
+        cr = new ControladorReservas();
+        
         this.estado = estado;
+        this.usuario = usuario;
         
         if(estado){
             
             jLabel1.setText("Disponible");
-            jButton2.setVisible(false);
-            jButton4.setVisible(false);
+            boton_borrar.setVisible(false);
+            boton_editar.setVisible(false);
         }
         else
         {
             jLabel1.setText(usuario.getNombre());
-            jButton1.setVisible(true);
+            boton_agregar.setVisible(false);
         }
     }
     /**
@@ -53,9 +60,9 @@ public class ContenedorReserva extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
         jPanel3 = new javax.swing.JPanel();
-        jButton4 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        boton_agregar = new javax.swing.JButton();
+        boton_editar = new javax.swing.JButton();
+        boton_borrar = new javax.swing.JButton();
 
         setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
@@ -68,25 +75,47 @@ public class ContenedorReserva extends javax.swing.JPanel {
         add(jLabel1);
         add(filler1);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Button-Add-icon.png"))); // NOI18N
-        jPanel3.add(jButton4);
+        boton_agregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Button-Add-icon.png"))); // NOI18N
+        jPanel3.add(boton_agregar);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/edit-icon.png"))); // NOI18N
-        jPanel3.add(jButton1);
+        boton_editar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/edit-icon.png"))); // NOI18N
+        jPanel3.add(boton_editar);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Trash-can-icon.png"))); // NOI18N
-        jPanel3.add(jButton2);
+        boton_borrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Trash-can-icon.png"))); // NOI18N
+        boton_borrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_borrarActionPerformed(evt);
+            }
+        });
+        jPanel3.add(boton_borrar);
 
         add(jPanel3);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void boton_borrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_borrarActionPerformed
+        // TODO add your handling code here:
+        int respuesta = JOptionPane.showConfirmDialog(this.getRootPane(), "¿Desea borrar la reserva para "+usuario.getNombre()+"?", "Confirmación de borrado", JOptionPane.YES_NO_OPTION);
+        if(respuesta == JOptionPane.YES_OPTION)
+        {
+            
+            if(cr.borrarReserva(usuario)){
+                ((AdministradorReserva)(this.getRootPane().getParent())).actualizarReservas();
+                JOptionPane.showMessageDialog(this.getRootPane(), "Se borro la reserva correctamente","Borrado de reserva",JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
+                JOptionPane.showMessageDialog(this.getRootPane(), "Se produjo un error al intentar borrar la reserva","Error borrado de reserva",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+       
+    }//GEN-LAST:event_boton_borrarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton boton_agregar;
+    private javax.swing.JButton boton_borrar;
+    private javax.swing.JButton boton_editar;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables

@@ -1,6 +1,6 @@
 package vista;
 
-import controlador.ControladorRegistro;
+import controlador.ControladorUsuario;
 import java.awt.Color;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
@@ -20,13 +20,13 @@ public class Registro extends javax.swing.JFrame {
 
     private char[] password_temp;
     private boolean password_ok;
-    private ControladorRegistro cr;
+    private ControladorUsuario cr;
     /**
      * Creates new form Registro
      */
     public Registro() {
         initComponents();
-        cr = new ControladorRegistro();
+        cr = new ControladorUsuario();
     }
 
     /**

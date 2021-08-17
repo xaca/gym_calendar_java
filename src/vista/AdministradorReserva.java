@@ -17,7 +17,9 @@ import vista.contenedor.ContenedorReserva;
  * @author xaca
  */
 public class AdministradorReserva extends javax.swing.JFrame {
-
+    
+    private Fecha fecha;
+    private int id_hora;
     ControladorReservas cr;
     /**
      * Creates new form Reserva
@@ -29,8 +31,16 @@ public class AdministradorReserva extends javax.swing.JFrame {
     public AdministradorReserva(int id_hora,Fecha fecha){
         initComponents();
         cr = new ControladorReservas();
+        this.id_hora = id_hora;
+        this.fecha = fecha;
+        actualizarReservas();
+    }
+    
+    public void actualizarReservas(){
         cr.traerReservas(id_hora, fecha);
+        jPanel1.removeAll();
         iniciarReservas();
+        jPanel1.updateUI();
     }
     
     private void iniciarReservas() {
@@ -39,6 +49,11 @@ public class AdministradorReserva extends javax.swing.JFrame {
         
         for (int i = 0; i < reservas.size(); i++) {
             jPanel1.add(new ContenedorReserva(reservas.get(i).getUsuario(),false));
+        }
+        if(reservas.size()<15){
+            for (int i = reservas.size(); i < 15; i++) {
+                jPanel1.add(new ContenedorReserva(new Usuario(),true));
+            }
         }
     }
     
@@ -58,6 +73,7 @@ public class AdministradorReserva extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
@@ -85,6 +101,14 @@ public class AdministradorReserva extends javax.swing.JFrame {
 
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
+        jButton2.setText("Volver");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jButton2);
+
         jButton1.setText("Cerrar Sesión");
         jPanel4.add(jButton1);
         jPanel4.add(filler2);
@@ -99,6 +123,12 @@ public class AdministradorReserva extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(816, 639));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        new SeleccionarHorario().setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -143,6 +173,7 @@ public class AdministradorReserva extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

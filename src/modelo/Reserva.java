@@ -12,6 +12,7 @@ package modelo;
 public class Reserva {
 
     private int id_reserva;
+    private int id_hora;
     private Fecha fecha;
     private Usuario usuario;
     /**
@@ -54,5 +55,19 @@ public class Reserva {
      */
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    /**
+     * @return the id_hora
+     */
+    public int getId_hora() {
+        return id_hora;
+    }
+
+    /**
+     * @param id_hora the id_hora to set
+     */
+    public void setId_hora(int id_hora) {
+        this.id_hora = id_hora;
     }
 }

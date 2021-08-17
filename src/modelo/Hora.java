@@ -5,33 +5,50 @@
  */
 package modelo;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author xaca
  */
-
-
 public class Hora {
-    
-    private ArrayList<Integer> horarios;
-    public static final String CAMPO_HORA = "hora";
-    public enum Dias{LUNES, MARTES, MIERCOLES, JUEVES,VIERNES, SABADO, DOMINGO;}
-    
+    private String hora_mostrar;
+    private int id_hora;
+    private int hora_militar;
+
     public Hora(){
-        horarios = new ArrayList<Integer>();
+        
     }
     
-    public void add(int hora){
-        horarios.add(hora);
+    public Hora(int id_hora,int hora){
+        this.id_hora = id_hora;
+        this.hora_militar = hora;
+        this.hora_mostrar = Fecha.parse(hora)+":00";
     }
     
-    public int get(int i){
-        return horarios.get(i);
+    /**
+     * @return the hora_mostrar
+     */
+    public String getHora_mostrar() {
+        return hora_mostrar;
     }
-    
-    public ArrayList<Integer> getHorario(){
-        return horarios;
+
+    /**
+     * @param hora_mostrar the hora_mostrar to set
+     */
+    public void setHora_mostrar(String hora_mostrar) {
+        this.hora_mostrar = hora_mostrar;
+    }
+
+    /**
+     * @return the id_hora
+     */
+    public int getId_hora() {
+        return id_hora;
+    }
+
+    /**
+     * @param id_hora the id_hora to set
+     */
+    public void setId_hora(int id_hora) {
+        this.id_hora = id_hora;
     }
 }

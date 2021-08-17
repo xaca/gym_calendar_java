@@ -7,7 +7,14 @@ package vista;
 
 import controlador.ControladorHorario;
 import java.util.ArrayList;
+import java.util.Calendar;
+import javax.swing.JOptionPane;
+import modelo.Fecha;
 import modelo.Hora;
+import modelo.Horario;
+import modelo.constantes.Consulta;
+import org.jdatepicker.DateModel;
+import org.jdatepicker.JDatePicker;
 
 /**
  *
@@ -15,6 +22,7 @@ import modelo.Hora;
  */
 public class SeleccionarHorario extends javax.swing.JFrame {
 
+    JDatePicker dp;
     ControladorHorario horario;
     /**
      * Creates new form SeleccionarHorario
@@ -22,29 +30,25 @@ public class SeleccionarHorario extends javax.swing.JFrame {
     public SeleccionarHorario() {
         initComponents();
         horario = new ControladorHorario();
-        horario.setHora();
-        llenarComboDias();
+        horario.setHorarios();
         llenarComboHoras();
+        
+        dp = new JDatePicker();
+        dp.getModel().setDay(8);        
+        dp.getModel().setMonth(8);
+        dp.getModel().setYear(Consulta.ANUALIDAD);
+        dp.getModel().setSelected(true);
+        jPanel3.add(dp);
+        //dp.getModel().setDate(getYear(""),getMonth(utilDate),getDay(utilDate));
+        //dp.getModel().setSelected(true);
     }
 
     private void llenarComboHoras() {
-        ArrayList<Integer> horas = horario.getHorario();
-        for (Integer hora : horas) {
-            jComboBox2.addItem(hora+":00");
+        //TODO: Crear un procedimiento que permita agregar items por medio de un modelo https://stackoverflow.com/questions/9650151/values-of-jcombobox
+        ArrayList<Hora> horas = horario.getHorario();
+        for (Hora hora : horas) {
+            jComboBox2.addItem(hora.getHora_mostrar());
         }
-    }
-    
-    public void llenarComboDias(){
-        jComboBox1.addItem(Hora.Dias.LUNES.name());        
-        jComboBox1.addItem(Hora.Dias.MARTES.name());        
-        jComboBox1.addItem(Hora.Dias.MIERCOLES.name());        
-        jComboBox1.addItem(Hora.Dias.JUEVES.name());        
-        jComboBox1.addItem(Hora.Dias.VIERNES.name());        
-        jComboBox1.addItem(Hora.Dias.SABADO.name());        
-        jComboBox1.addItem(Hora.Dias.DOMINGO.name());        
-        
-        
-
     }
     
     /**
@@ -57,20 +61,23 @@ public class SeleccionarHorario extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jPanel3 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(70, 0), new java.awt.Dimension(50, 32767));
         jComboBox2 = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Selecciona el horario"));
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione el día" }));
-        jPanel1.add(jComboBox1);
+        jPanel1.add(jPanel3);
         jPanel1.add(filler1);
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione la hora" }));
@@ -93,10 +100,30 @@ public class SeleccionarHorario extends javax.swing.JFrame {
         getContentPane().add(jPanel1);
         jPanel1.setBounds(150, 190, 480, 140);
 
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logo.png"))); // NOI18N
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(350, 70, 80, 80);
+        jPanel4.add(jLabel1, java.awt.BorderLayout.WEST);
+
+        jButton2.setText("Volver");
+        jPanel5.add(jButton2);
+
+        jButton4.setText("Actualizar Usuario");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jPanel5.add(jButton4);
+
+        jButton3.setText("Cerrar Sesión");
+        jPanel5.add(jButton3);
+
+        jPanel4.add(jPanel5, java.awt.BorderLayout.EAST);
+
+        getContentPane().add(jPanel4);
+        jPanel4.setBounds(150, 90, 480, 80);
 
         setSize(new java.awt.Dimension(816, 639));
         setLocationRelativeTo(null);
@@ -104,9 +131,26 @@ public class SeleccionarHorario extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
-        new AdministradorReserva().setVisible(true);
+        int id_hora;
+        DateModel dm = dp.getModel();
+        Fecha fecha = new Fecha(dm.getYear(),dm.getMonth(),dm.getDay());
+        
+        if(jComboBox2.getSelectedIndex()>0){
+            id_hora = horario.getIdHora(jComboBox2.getSelectedIndex()-1);
+            this.setVisible(false);
+            new AdministradorReserva(id_hora,fecha).setVisible(true);
+        }
+        else{
+            JOptionPane.showMessageDialog(rootPane, "Verifique los datos", "Error al seleccionar el horario", JOptionPane.ERROR_MESSAGE);
+        }
+        //id_hora = horario.getIdHora(jComboBox2.getSelectedIndex());
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        new ActualizarUsuario().setVisible(true);
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -146,11 +190,16 @@ public class SeleccionarHorario extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     // End of variables declaration//GEN-END:variables
 
     

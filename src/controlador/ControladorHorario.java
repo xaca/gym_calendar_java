@@ -7,6 +7,7 @@ package controlador;
 
 import java.util.ArrayList;
 import modelo.Hora;
+import modelo.Horario;
 
 /**
  *
@@ -14,18 +15,18 @@ import modelo.Hora;
  */
 public class ControladorHorario{
     
-    private Hora horas;
+    private Horario horas;
     
     public ControladorHorario(){
-        horas = new Hora();
+        horas = new Horario();
     }
-    public void setHora(){
+    public void setHorarios(){
         horas = GestorBaseDatos.getHoras();
     }
-    public ArrayList<Integer> getHorario(){
-        return horas.getHorario();
+    public ArrayList<Hora> getHorario(){
+        return horas.getHorarios();
     }
-    public void add(int hora){
-        horas.add(hora);
+    public int getIdHora(int i){
+        return horas.getIdHora(i);
     }
 }

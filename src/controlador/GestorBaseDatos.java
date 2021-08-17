@@ -9,7 +9,7 @@ import modelo.constantes.Consulta;
 import java.sql.*;
 import java.util.ArrayList;
 import modelo.Fecha;
-import modelo.Hora;
+import modelo.Horario;
 import modelo.Reserva;
 import modelo.Usuario;
 import modelo.constantes.Configuracion;
@@ -20,22 +20,22 @@ import modelo.constantes.Configuracion;
  */
 public class GestorBaseDatos {
 
-    public static Hora getHoras() {
+    public static Horario getHoras() {
 
         Connection conn;
         Statement stmt;
         ResultSet rs = null;
-        Hora hora = null;
+        Horario hora = null;
 
         try {
             Class.forName(Configuracion.DRIVER);
             conn = DriverManager.getConnection(Configuracion.URL_BASE_DATOS, Configuracion.USUARIO, Configuracion.CLAVE);
             stmt = conn.createStatement();
             rs = stmt.executeQuery(Consulta.TODAS_LAS_HORAS);
-            hora = new Hora();
+            hora = new Horario();
 
             while (rs.next()) {
-                hora.add(rs.getInt(Hora.CAMPO_HORA));
+                hora.add(rs.getInt("id"),rs.getInt("hora"));
             }
 
             conn.close();
@@ -60,7 +60,7 @@ public class GestorBaseDatos {
             Class.forName(Configuracion.DRIVER);
             conn = DriverManager.getConnection(Configuracion.URL_BASE_DATOS, Configuracion.USUARIO, Configuracion.CLAVE);
             stmt = conn.createStatement();
-            //System.out.println(Consulta.crearValidacionClave(usuario));
+            System.out.println(Consulta.traerReservas(id_hora,fecha));
             rs = stmt.executeQuery(Consulta.traerReservas(id_hora,fecha));
             reservas = new ArrayList<Reserva>();
             
@@ -89,6 +89,7 @@ public class GestorBaseDatos {
 
         return reservas;
     }
+    
     
     /**
      * Inserta un usuario en la base de datos
@@ -128,8 +129,9 @@ public class GestorBaseDatos {
 
         return false;
     }
+    
 
-    public static Usuario validarClave(Usuario usuario) {
+    public static Usuario actualizarReserva(Usuario usuario) {
         
         Connection conn;
         Statement stmt;
@@ -159,5 +161,113 @@ public class GestorBaseDatos {
         return respuesta;
     }
     
+    public static Usuario validarClave(Usuario usuario) {
+        
+        Connection conn;
+        Statement stmt;
+        ResultSet rs = null;
+        Usuario respuesta = null;
 
+        try {
+            Class.forName(Configuracion.DRIVER);
+            conn = DriverManager.getConnection(Configuracion.URL_BASE_DATOS, Configuracion.USUARIO, Configuracion.CLAVE);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(Consulta.crearValidacionClave(usuario));
+            
+            if (rs.next()) {
+                respuesta = new Usuario();
+                respuesta.setId(rs.getInt("id"));
+                respuesta.setUsuario(rs.getString("usuario"));
+                respuesta.setNombre(rs.getString("nombre"));
+                respuesta.setApellido(rs.getString("apellido"));
+                respuesta.setCorreo(rs.getString("correo"));
+            }
+
+            conn.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return respuesta;
+    }
+
+    public static boolean actualizar(Usuario usuario) {
+        Connection conn;
+        PreparedStatement pe;
+        ResultSet rs;
+        boolean respuesta = false;
+        
+        try {
+            Class.forName(Configuracion.DRIVER);
+            conn = DriverManager.getConnection(Configuracion.URL_BASE_DATOS, Configuracion.USUARIO, Configuracion.CLAVE);
+            System.out.println(Consulta.actualizarUsuario(usuario));
+            pe = conn.prepareStatement(Consulta.actualizarUsuario(usuario));
+            pe.execute();    
+            respuesta = pe.getUpdateCount()>0;
+            conn.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return respuesta;
+    }
+    
+    public static Usuario traerUsuario(Usuario usuario) {
+
+        Connection conn;
+        Statement stmt;
+        ResultSet rs = null;
+        Usuario respuesta = null;
+        
+        try {
+            Class.forName(Configuracion.DRIVER);
+            conn = DriverManager.getConnection(Configuracion.URL_BASE_DATOS, Configuracion.USUARIO, Configuracion.CLAVE);
+            stmt = conn.createStatement();
+            System.out.println(Consulta.traerUsuario(usuario));
+            rs = stmt.executeQuery(Consulta.traerUsuario(usuario));
+            
+            if(rs.next())
+            {
+                respuesta = new Usuario();
+                respuesta.setId(rs.getInt("id"));
+                respuesta.setUsuario(rs.getString("usuario"));
+                respuesta.setNombre(rs.getString("nombre"));
+                respuesta.setApellido(rs.getString("apellido"));
+                respuesta.setDireccion(rs.getString("direccion"));
+                respuesta.setTelefono(rs.getString("telefono"));
+                respuesta.setCorreo(rs.getString("correo"));
+            }
+            
+            conn.close();
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return respuesta;
+    }
+
+    public static boolean borrarReserva(Usuario usuario) {
+        Connection conn;
+        Statement stmt;
+        ResultSet rs = null;
+        boolean resultado = false;
+        
+        try {
+            Class.forName(Configuracion.DRIVER);
+            conn = DriverManager.getConnection(Configuracion.URL_BASE_DATOS, Configuracion.USUARIO, Configuracion.CLAVE);
+            stmt = conn.createStatement();
+            System.out.println(Consulta.borrarReserva(usuario));
+            
+            stmt.execute(Consulta.borrarReserva(usuario));
+            resultado = stmt.getUpdateCount()>0;
+                        
+            conn.close();
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return resultado;
+    }
 }

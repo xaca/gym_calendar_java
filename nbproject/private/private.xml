@@ -3,13 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/xaca/Documents/NetBeansProjects/GymCalendar/src/controlador/ControladorLogin.java</file>
+            <file>file:/C:/Users/xaca/Documents/NetBeansProjects/GymCalendar/src/controlador/ControladorReservas.java</file>
             <file>file:/C:/Users/xaca/Documents/NetBeansProjects/GymCalendar/src/controlador/GestorBaseDatos.java</file>
-            <file>file:/C:/Users/xaca/Documents/NetBeansProjects/GymCalendar/src/modelo/Hora.java</file>
-            <file>file:/C:/Users/xaca/Documents/NetBeansProjects/GymCalendar/src/vista/AdministradorReserva.java</file>
             <file>file:/C:/Users/xaca/Documents/NetBeansProjects/GymCalendar/src/vista/SeleccionarHorario.java</file>
+            <file>file:/C:/Users/xaca/Documents/NetBeansProjects/GymCalendar/src/vista/AdministradorReserva.java</file>
             <file>file:/C:/Users/xaca/Documents/NetBeansProjects/GymCalendar/src/vista/contenedor/ContenedorReserva.java</file>
-            <file>file:/C:/Users/xaca/Documents/NetBeansProjects/GymCalendar/src/modelo/Fecha.java</file>
             <file>file:/C:/Users/xaca/Documents/NetBeansProjects/GymCalendar/src/modelo/constantes/Consulta.java</file>
         </group>
     </open-files>

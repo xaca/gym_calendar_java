@@ -48,4 +48,32 @@ public class Consulta {
         sql.append(" and reservas.id_usuario = usuarios.id;");
         return sql.toString();
     }
+    
+    public static String traerUsuario(Usuario usuario){
+        //SELECT * FROM `reservas` WHERE id_hora = 1 and dia = '2021-09-08'; 
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT * FROM `usuarios` WHERE");
+        sql.append(" correo = '"+usuario.getCorreo()+"';");
+        return sql.toString();
+    }
+
+    public static String actualizarUsuario(Usuario usuario) {
+        //UPDATE `usuarios` SET `usuario` = 'Lucy Sky', `direccion` = 'Calle siempre alegre 4 Ever', `telefono` = '3002345618', `correo` = 'lucy.sky@hotmail.com' WHERE `usuarios`.`id` = 3; 
+        StringBuilder sql = new StringBuilder();
+        sql.append("UPDATE `usuarios` SET");
+        sql.append(" usuario = '"+usuario.getUsuario()+"',");
+        sql.append(" nombre = '"+usuario.getNombre()+"',");
+        sql.append(" apellido = '"+usuario.getApellido()+"',");
+        sql.append(" direccion = '"+usuario.getDireccion()+"',");
+        sql.append(" telefono = '"+usuario.getTelefono()+"'");
+        sql.append(" WHERE id = '"+usuario.getId()+"';");
+        return sql.toString();
+    }
+    public static String borrarReserva(Usuario usuario){
+        //DELETE FROM `reservas` WHERE `reservas`.`id` = 3"
+        StringBuilder sql = new StringBuilder();
+        sql.append("DELETE FROM `reservas`");
+        sql.append(" WHERE `reservas`.`id_usuario` = "+usuario.getId()+";");
+        return sql.toString();
+    }
 }

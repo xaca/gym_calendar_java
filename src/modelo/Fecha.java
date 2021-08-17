@@ -11,6 +11,7 @@ package modelo;
  */
 public class Fecha {
     private String anualidad;
+    private int mes_number;
     private String mes;
     private String dia;
     
@@ -21,11 +22,19 @@ public class Fecha {
      public Fecha(int anualidad,int mes,int dia)
     {
         this.anualidad = parse(anualidad);
-        this.mes = parse(mes);
+        this.mes_number = mes; //Los meses en el componente DatePickers, empiezan en 0
+        this.mes = parse(mes+1);
         this.dia = parse(dia);
     }
+
+    public Fecha(String fecha) {
+        String datos[] = fecha.split("-");
+        this.anualidad = datos[0];
+        this.mes = datos[1];
+        this.dia = datos[2];
+    }
      
-    public String parse(int valor){
+    public static String parse(int valor){
         return valor<10?"0"+valor:""+valor;
     }
     
